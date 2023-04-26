@@ -19,6 +19,14 @@ origins = [
 
 @app.on_event("startup")
 async def startup():
+    """
+    The startup function is called when the application starts up.
+    It's a good place to initialize things that are needed by your app,
+    such as connecting to databases or initializing caches.
+
+    :return: A list of coroutines
+    :doc-author: Trelent
+    """
     r = await redis.Redis(host=settings.redis_host, port=settings.redis_port, db=0)
     await FastAPILimiter.init(r)
 
@@ -34,11 +42,26 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
+    """
+    The root function returns a JSON object with the message 'Contact book'.
+
+    :return: A dict, which is converted into json
+    :doc-author: Trelent
+    """
     return {"message": "Contact book"}
 
 
 @app.get("/api/healthchecker")
 def healthchecker(db: Session = Depends(get_db)):
+    """
+    The healthchecker function is a simple endpoint that returns a JSON object with the message 'All right!'
+    if everything is working correctly. This function can be used to check if the API server and database are up and
+    running.
+
+    :param db: Session: Pass the database session to the function
+    :return: A json object with the message “all right!”
+    :doc-author: Trelent
+    """
     try:
         # Make request
         result = db.execute(text("SELECT 1")).fetchone()

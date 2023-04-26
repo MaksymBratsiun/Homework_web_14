@@ -23,6 +23,20 @@ conf = ConnectionConfig(
 
 
 async def send_email(email: EmailStr, username: str, host: str):
+    """
+    The send_email function sends an email to the user with a link to confirm their email address.
+        The function takes in three parameters:
+            -email: EmailStr, the user's email address that they entered when signing up for an account.
+            -username: str, the username of the user who is trying to sign up for an account. This will be used in
+                conjunction with host (see below) and token_verification (see below) as part of a URL that will be sent
+                via email to verify their identity and allow them access into our application.
+
+    :param email: EmailStr: Specify the email address of the user
+    :param username: str: Personalize the email
+    :param host: str: Pass the host of the application to the template
+    :return: A coroutine object
+    :doc-author: Trelent
+    """
     try:
         token_verification = auth_service.create_email_token({"sub": email})
         message = MessageSchema(

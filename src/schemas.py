@@ -50,8 +50,3 @@ class TokenModel(BaseModel):
 
 class RequestEmail(BaseModel):
     email: EmailStr
-
-
-class UserPasswordUpdate(BaseModel):
-    password: str = Field(min_length=6, max_length=255)
-    confirm_password: str = Field(min_length=6, max_length=255)

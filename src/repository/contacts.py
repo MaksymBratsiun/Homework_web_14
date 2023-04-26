@@ -7,11 +7,38 @@ from src.database.model import Contact
 
 
 async def get_contacts(current_user: int, limit: int, offset: int, db: Session):
+    """
+    The get_contacts function returns a list of contacts for the current user.
+        Args:
+            current_user (int): The id of the user whose contacts are being retrieved.
+            limit (int): The number of results to return per page. Defaults to 10 if not specified by client request.
+            offset (int): The number of results to skip before returning any data, used for pagination purposes.
+                Defaults to 0 if not specified by client request.
+
+    :param current_user: int: Get the contacts of a specific user
+    :param limit: int: Limit the number of results returned
+    :param offset: int: Determine the number of contacts to skip
+    :param db: Session: Pass the database session to the function
+    :return: A list of contacts
+    :doc-author: Trelent
+    """
     contacts = db.query(Contact).filter_by(user_id=current_user).limit(limit).offset(offset).all()
     return contacts
 
 
 async def create_contact(body, current_user: int, db: Session):
+    """
+    The create_contact function creates a new contact in the database.
+        Args:
+            body (ContactCreate): The contact to create.
+            current_user (int): The user id of the currently logged-in user.
+
+    :param body: Get the data from the request body
+    :param current_user: int: Get the user id of the current logged in user
+    :param db: Session: Access the database
+    :return: A contact object
+    :doc-author: Trelent
+    """
     contact = db.query(Contact).filter(and_(Contact.email == body.email, Contact.user_id == current_user)).first()
     if not contact:
         contact = Contact(**body.dict())
@@ -23,13 +50,38 @@ async def create_contact(body, current_user: int, db: Session):
 
 
 async def get_contact_by_id(contact_id: int, current_user: int, db: Session):
-    print('before contact')
+    """
+    The get_contact_by_id function returns a contact by its id.
+        Args:
+            contact_id (int): The id of the contact to be returned.
+            current_user (int): The user who is making the request for a specific contact. This is used to ensure that
+                only contacts belonging to this user are returned, and not those belonging to other users
+                in the database.
+            db (Session): A connection with an open session with our database, which will allow us access
+                and manipulation of data within it.
+
+    :param contact_id: int: Identify the contact to be retrieved
+    :param current_user: int: Get the current user id from the token
+    :param db: Session: Pass the database session to the function
+    :return: The contact with the given id
+    :doc-author: Trelent
+    """
     contact = db.query(Contact).filter(and_(Contact.id == contact_id, Contact.user_id == current_user)).first()
-    print('after contact')
     return contact
 
 
 async def get_search(find_item: str, current_user: int, db: Session):
+    """
+    The get_search function takes in a string, the current user's id, and the database session.
+    It then searches for contacts that match the search string in their first name, last name or email.
+    The results are returned as a list of Contact objects.
+
+    :param find_item: str: Search for a contact in the database
+    :param current_user: int: Get the user id of the current user
+    :param db: Session: Pass the database session to the function
+    :return: A list of contacts that match the search criteria
+    :doc-author: Trelent
+    """
     result = []
     if find_item:
         contacts_f_name = db.query(Contact).filter(and_(Contact.user_id == current_user,
@@ -51,6 +103,17 @@ async def get_search(find_item: str, current_user: int, db: Session):
 
 
 async def birthday_7(current_user: int, db: Session):
+    """
+    The birthday_7 function returns a list of contacts whose birthday is within the next 7 days.
+        Args:
+            current_user (int): The id of the user who's contacts are being searched.
+            db (Session): A database session object to query for data.
+
+    :param current_user: int: Specify the user id of the current user
+    :param db: Session: Pass the database session to the function
+    :return: A list of contacts whose birthdays are in the next 7 days
+    :doc-author: Trelent
+    """
     contacts = db.query(Contact).filter_by(user_id=current_user).all()
     result = []
     today = datetime.now()
