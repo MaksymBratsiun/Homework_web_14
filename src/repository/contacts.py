@@ -13,7 +13,7 @@ async def get_contacts(current_user: int, limit: int, offset: int, db: Session):
             current_user (int): The id of the user whose contacts are being retrieved.
             limit (int): The number of results to return per page. Defaults to 10 if not specified by client request.
             offset (int): The number of results to skip before returning any data, used for pagination purposes.
-                Defaults to 0 if not specified by client request.
+            Defaults to 0 if not specified by client request.
 
     :param current_user: int: Get the contacts of a specific user
     :param limit: int: Limit the number of results returned
@@ -55,15 +55,15 @@ async def get_contact_by_id(contact_id: int, current_user: int, db: Session):
         Args:
             contact_id (int): The id of the contact to be returned.
             current_user (int): The user who is making the request for a specific contact. This is used to ensure that
-                only contacts belonging to this user are returned, and not those belonging to other users
-                in the database.
+            only contacts belonging to this user are returned, and not those belonging to other users
+            in the database.
             db (Session): A connection with an open session with our database, which will allow us access
-                and manipulation of data within it.
+            and manipulation of data within it.
 
     :param contact_id: int: Identify the contact to be retrieved
     :param current_user: int: Get the current user id from the token
     :param db: Session: Pass the database session to the function
-    :return: The contact with the given id
+    :return: A contact object
     :doc-author: Trelent
     """
     contact = db.query(Contact).filter(and_(Contact.id == contact_id, Contact.user_id == current_user)).first()
