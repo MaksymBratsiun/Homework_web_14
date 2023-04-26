@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "homework-web-14"
+version = "0.1.0"
+description = ""
+authors = ["MaksymBratsiun <bratsyun_m@ukr.net>"]
+readme = "README.md"
+
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.95.1"
+sqlalchemy = "^2.0.9"
+uvicorn = "^0.21.1"
+psycopg2 = "^2.9.6"
+alembic = "^1.10.3"
+pydantic = {extras = ["dotenv"], version = "^1.10.7"}
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-multipart = "^0.0.6"
+libgravatar = "^1.0.4"
+fastapi-mail = "^1.2.7"
+fastapi-limiter = "^0.1.5"
+redis = "^4.5.4"
+cloudinary = "^1.32.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
