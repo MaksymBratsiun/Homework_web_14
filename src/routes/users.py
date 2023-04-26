@@ -35,10 +35,10 @@ async def update_avatar_user(file: UploadFile = File(), current_user: User = Dep
         Args:
             file (UploadFile): The image to be uploaded.
             current_user (User): The user whose avatar is being updated.  This is passed in by the auth_service
-                dependency, which uses JWT authentication to get the current user from their token's payload and pass it
-                into this function as an argument.  If no valid token was provided, then this will return None instead
-                of a User object, and thus raise an HTTPException with status code 401 Unauthorized because there was
-                no valid authorization header present in the request that contained a JWT token with
+            dependency, which uses JWT authentication to get the current user from their token's payload and pass it
+            into this function as an argument.  If no valid token was provided, then this will return None instead
+            of a User object, and thus raise an HTTPException with status code 401 Unauthorized because there was
+            no valid authorization header present in the request that contained a JWT token with
 
     :param file: UploadFile: Upload the file to cloudinary
     :param current_user: User: Get the current user from the database

@@ -2,10 +2,10 @@ from fastapi import Depends, HTTPException, status, APIRouter, Security, Backgro
 from fastapi.security import HTTPBearer, OAuth2PasswordRequestForm, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 
-from src.services import auth as auth_service
 from src.database.db import get_db
 from src.repository import users as repository_users
 from src.schemas import UserResponse, UserModel, TokenModel, RequestEmail
+from src.services import auth as auth_service
 from src.services.email import send_email
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -22,7 +22,7 @@ async def signup(body: UserModel,
         It takes a UserModel object as input, which is validated by pydantic.
         The function then checks if an account with the same email already exists, and raises an error if it does.
         If no such account exists, it hashes the password using auth_service's get_password_hash method and creates
-            a new user in the database using repository_users' create_user method.
+        a new user in the database using repository_users' create_user method.
 
     :param body: UserModel: Get the user data from the request body
     :param background_tasks: BackgroundTasks: Add a task to the background tasks queue
@@ -109,20 +109,18 @@ async def refresh_token(credentials: HTTPAuthorizationCredentials = Security(sec
 
 @router.get('/confirmed_email/{token}')
 async def confirmed_email(token: str, db: Session = Depends(get_db)):
+
     """
     The confirmed_email function is used to confirm a user's email address.
         It takes the token from the URL and uses it to get the user's email address.
-        The function then checks if there is a user with that email in our database, and if not,
-            returns an error message.
-        If there is a user with that email in our database, we check whether their account has already been
-            confirmed or not.
-            If it has been confirmed already, we return another error message saying so; otherwise we call
-                repository_users'
-            confirmed_email function which sets the 'confirmed' field of that particular User object
+        The function then checks if there is a user with that email in our database, and if not, returns an error message.
+        If there is a user with that email in our database, we check whether their account has already been confirmed or not.
+        If it has been confirmed already, we return an appropriate message; otherwise we call repository_users'
+        confirmed_email function which sets the 'confirmed' field of that particular record to True.
 
     :param token: str: Get the token from the url
-    :param db: Session: Get a database session
-    :return: A message that the email has been confirmed
+    :param db: Session: Get the database session
+    :return: A message that the email is already confirmed or a message that the email is confirmed
     :doc-author: Trelent
     """
     email = auth_service.get_email_from_token(token)
@@ -157,5 +155,3 @@ async def request_email(body: RequestEmail, background_tasks: BackgroundTasks, r
             return {"message": "Your email is already confirmed"}
         background_tasks.add_task(send_email, user.email, user.username, request.base_url)
     return {"message": "Check your email for confirmation."}
-
-

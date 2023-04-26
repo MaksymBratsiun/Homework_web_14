@@ -15,8 +15,7 @@ cloudinary.config(
 def generate_image_name(email: str):
     """
     The generate_image_name function takes an email address as input and returns a unique image name.
-    The function uses the hashlib library to generate a SHA256 hash of the email address,
-        then truncates it to 16 characters.
+    The function uses the hashlib library to generate a SHA256 hash of the email address, then truncates it to 16 characters.
     This ensures that each user has a unique image name.
 
     :param email: str: Specify the type of data that will be passed into the function
