@@ -22,11 +22,13 @@ fastapi-mail = "^1.2.7"
 fastapi-limiter = "^0.1.5"
 redis = {extras = ["asyncio"], version = "^4.5.4"}
 cloudinary = "^1.32.0"
+pytest-cov = "^4.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
 sphinx = "^6.2.1"
 pytest = "^7.3.1"
+
 
 [build-system]
 requires = ["poetry-core"]

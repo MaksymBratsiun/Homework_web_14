@@ -117,9 +117,18 @@ class TestContactsRepository(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(result[0].email)
         self.assertEqual(result[0].email, contacts[0].email)
 
+    async def test_get_search_not_found(self):
+        self.session.query(Contact).filter().all.return_value = []
+        result = await get_search('es', self.user.id, self.session)
+        self.assertEqual(result, [])
+
     async def test_birthday_7(self):
-        born_date_test = datetime.now() - timedelta(days=363)
-        contacts = [Contact(born_date=born_date_test)]
+        born_date_test_soon = datetime.now() - timedelta(days=363)
+        born_date_test_far = datetime.now() - timedelta(days=30)
+        born_date_test_late = datetime.now() - timedelta(days=345)
+        contacts = [Contact(born_date=born_date_test_soon),
+                    Contact(born_date=born_date_test_far),
+                    Contact(born_date=born_date_test_late)]
         self.session.query(Contact).filter_by().all.return_value = contacts
         result = await birthday_7(self.user.id, self.session)
-        self.assertEqual(result, contacts)
+        self.assertEqual(result[0].born_date, born_date_test_soon)
