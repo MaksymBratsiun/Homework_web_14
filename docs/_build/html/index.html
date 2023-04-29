@@ -369,6 +369,61 @@ The results are returned as a list of Contact objects.</p>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="src.repository.contacts.remove_contact">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.repository.contacts.</span></span><span class="sig-name descname"><span class="pre">remove_contact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contact</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.repository.contacts.remove_contact" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>The remove_contact function removes a contact from the database.</dt><dd><dl class="simple">
+<dt>Args:</dt><dd><p>contact (Contact): The Contact object to be removed from the database.
+db (Session): The SQLAlchemy Session object that will be used to remove the Contact object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contact</strong> – Pass the contact object to be deleted</p></li>
+<li><p><strong>db</strong> – Session: Pass the database session to the function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The contact that was deleted</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.repository.contacts.update_contact">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.repository.contacts.</span></span><span class="sig-name descname"><span class="pre">update_contact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contact</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.repository.contacts.update_contact" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>The update_contact function updates a contact in the database.</dt><dd><dl class="simple">
+<dt>Args:</dt><dd><p>body (Contact): The updated contact object to be stored in the database.
+db (Session): A connection to the SQLite3 database.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – Get the data from the request</p></li>
+<li><p><strong>contact</strong> – Get the contact from the database</p></li>
+<li><p><strong>db</strong> – Session: Access the database</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated contact</p>
+</dd>
+<dt class="field-odd">Doc-author<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="module-src.repository.users">
 <span id="contact-book-app-repository-users"></span><h1>Contact Book App repository Users<a class="headerlink" href="#module-src.repository.users" title="Permalink to this heading">¶</a></h1>
@@ -749,9 +804,9 @@ and returns a dictionary containing information about that contact.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>contact_id</strong> – int: Specify the id of the contact to be deleted</p></li>
-<li><p><strong>current_user</strong> – User: Get the current user from the database</p></li>
-<li><p><strong>db</strong> – Session: Pass the database session to the function</p></li>
+<li><p><strong>contact_id</strong> – int: Get the contact id from the url</p></li>
+<li><p><strong>current_user</strong> – User: Get the current user from the auth_service</p></li>
+<li><p><strong>db</strong> – Session: Get the database session</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -766,18 +821,14 @@ and returns a dictionary containing information about that contact.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="src.routes.contacts.update_contact_by_id">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.routes.contacts.</span></span><span class="sig-name descname"><span class="pre">update_contact_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ContactModel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contact_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Path(Ellipsis)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.database.model.User" title="src.database.model.User"><span class="pre">User</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.routes.contacts.update_contact_by_id" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>The update_contact_by_id function updates a contact in the database.</dt><dd><p>The function takes an id of a contact and returns the updated contact.
-If no such user exists, it raises an HTTPException with status code 404 (Not Found).</p>
-</dd>
-</dl>
+<dd><p>The update_contact_by_id function updates a contact in the database.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>body</strong> – ContactModel: Get the contact model from the request body</p></li>
-<li><p><strong>contact_id</strong> – int: Get the contact id from the url</p></li>
+<li><p><strong>body</strong> – ContactModel: Get the data from the request body</p></li>
+<li><p><strong>contact_id</strong> – int: Identify the contact to be deleted</p></li>
 <li><p><strong>current_user</strong> – User: Get the current user from the database</p></li>
-<li><p><strong>db</strong> – Session: Get the database session</p></li>
+<li><p><strong>db</strong> – Session: Pass the database session to the repository layer</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1182,6 +1233,8 @@ via email to verify their identity and allow them access into our application.</
 <li><a class="reference internal" href="#src.repository.contacts.get_contact_by_id"><code class="docutils literal notranslate"><span class="pre">get_contact_by_id()</span></code></a></li>
 <li><a class="reference internal" href="#src.repository.contacts.get_contacts"><code class="docutils literal notranslate"><span class="pre">get_contacts()</span></code></a></li>
 <li><a class="reference internal" href="#src.repository.contacts.get_search"><code class="docutils literal notranslate"><span class="pre">get_search()</span></code></a></li>
+<li><a class="reference internal" href="#src.repository.contacts.remove_contact"><code class="docutils literal notranslate"><span class="pre">remove_contact()</span></code></a></li>
+<li><a class="reference internal" href="#src.repository.contacts.update_contact"><code class="docutils literal notranslate"><span class="pre">update_contact()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-src.repository.users">Contact Book App repository Users</a><ul>

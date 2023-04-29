@@ -93,26 +93,18 @@ async def update_contact_by_id(body: ContactModel, contact_id: int = Path(ge=1),
                                db: Session = Depends(get_db)):
     """
     The update_contact_by_id function updates a contact in the database.
-        The function takes an id of a contact and returns the updated contact.
-        If no such user exists, it raises an HTTPException with status code 404 (Not Found).
 
-    :param body: ContactModel: Get the contact model from the request body
-    :param contact_id: int: Get the contact id from the url
+    :param body: ContactModel: Get the data from the request body
+    :param contact_id: int: Identify the contact to be deleted
     :param current_user: User: Get the current user from the database
-    :param db: Session: Get the database session
+    :param db: Session: Pass the database session to the repository layer
     :return: The updated contact
     :doc-author: Trelent
     """
     contact = await repository_contacts.get_contact_by_id(contact_id, current_user.id, db)
     if contact is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
-    contact.first_name = body.first_name
-    contact.last_name = body.last_name
-    contact.email = body.email
-    contact.phone = body.phone
-    contact.born_date = body.born_date
-    contact.add_data = body.add_data
-    db.commit()
+    contact = await repository_contacts.update_contact(body, contact, db)
     return contact
 
 
@@ -128,17 +120,16 @@ async def remove_contact_by_id(contact_id: int = Path(ge=1),
         The function takes in an integer representing the id of the contact to be removed,
         and returns a dictionary containing information about that contact.
 
-    :param contact_id: int: Specify the id of the contact to be deleted
-    :param current_user: User: Get the current user from the database
-    :param db: Session: Pass the database session to the function
+    :param contact_id: int: Get the contact id from the url
+    :param current_user: User: Get the current user from the auth_service
+    :param db: Session: Get the database session
     :return: A contact object
     :doc-author: Trelent
     """
     contact = await repository_contacts.get_contact_by_id(contact_id, current_user.id, db)
     if contact is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
-    db.delete(contact)
-    db.commit()
+    contact = await repository_contacts.remove_contact(contact, db)
     return contact
 
 

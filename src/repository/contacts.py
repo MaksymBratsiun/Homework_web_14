@@ -70,6 +70,46 @@ async def get_contact_by_id(contact_id: int, current_user: int, db: Session):
     return contact
 
 
+async def update_contact(body, contact, db: Session):
+    """
+    The update_contact function updates a contact in the database.
+        Args:
+            body (Contact): The updated contact object to be stored in the database.
+            db (Session): A connection to the SQLite3 database.
+
+    :param body: Get the data from the request
+    :param contact: Get the contact from the database
+    :param db: Session: Access the database
+    :return: The updated contact
+    :doc-author: Trelent
+    """
+    contact.first_name = body.first_name
+    contact.last_name = body.last_name
+    contact.email = body.email
+    contact.phone = body.phone
+    contact.born_date = body.born_date
+    contact.add_data = body.add_data
+    db.commit()
+    return contact
+
+
+async def remove_contact(contact, db: Session):
+    """
+    The remove_contact function removes a contact from the database.
+        Args:
+            contact (Contact): The Contact object to be removed from the database.
+            db (Session): The SQLAlchemy Session object that will be used to remove the Contact object.
+
+    :param contact: Pass the contact object to be deleted
+    :param db: Session: Pass the database session to the function
+    :return: The contact that was deleted
+    :doc-author: Trelent
+    """
+    db.delete(contact)
+    db.commit()
+    return contact
+
+
 async def get_search(find_item: str, current_user: int, db: Session):
     """
     The get_search function takes in a string, the current user's id, and the database session.
