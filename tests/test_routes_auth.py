@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
 
 from src.database.model import User
-from src.services.auth import create_access_token, create_refresh_token, create_email_token
+from src.services.auth import create_email_token
 
 
 def test_signup(client, user, monkeypatch):
@@ -61,7 +61,7 @@ def test_login_invalid_email(client, user, session):
     assert payload['detail'] == 'Invalid email'
 
 
-def test_refresh_token(client, user, session, monkeypatch):
+def test_refresh_token_no_authorisation(client, user, session, monkeypatch):
     current_user: User = session.query(User).filter(User.email == user.get('email')).first()
     current_user.confirmed = True
     session.commit()
@@ -70,6 +70,24 @@ def test_refresh_token(client, user, session, monkeypatch):
     response = client.get('/api/auth/refresh_token')
     payload = response.json()
     assert payload['detail'] == 'Not authenticated'
+
+
+def test_refresh_token_ok(client, session, user):
+    current_user: User = session.query(User).filter(User.email == user.get('email')).first()
+    headers = {'Authorization': f'Bearer {current_user.refresh_token}'}
+    response = client.get('api/auth/refresh_token', headers=headers)
+    assert response.status_code == 200, response.text
+    payload = response.json()
+    assert payload['token_type'] == 'bearer'
+
+
+def test_refresh_token_not_ok(client, session, user):
+    current_user: User = session.query(User).filter(User.email == user.get('email')).first()
+    headers = {'Authorization': f'Bearer {current_user.refresh_token}+'}
+    response = client.get('api/auth/refresh_token', headers=headers)
+    assert response.status_code == 401, response.text
+    payload = response.json()
+    assert payload['detail'] == 'Could not validate credentials'
 
 
 def test_confirmed_email(client, user, session):
@@ -105,7 +123,9 @@ def test_no_user_confirmed_email(client, user, session):
     assert payload['detail'] == 'Verification error'
 
 
-def test_request_email(client, user, session):
+def test_request_email(client, user, session, monkeypatch):
+    mock_send_email = MagicMock()
+    monkeypatch.setattr('src.routes.auth.send_email', mock_send_email)
     current_user: User = session.query(User).filter(User.email == user.get('email')).first()
     current_user.confirmed = False
     session.commit()
@@ -116,7 +136,9 @@ def test_request_email(client, user, session):
     assert payload['message'] == 'Check your email for confirmation.'
 
 
-def test_confirmed_request_email(client, user, session):
+def test_confirmed_request_email(client, user, session, monkeypatch):
+    mock_send_email = MagicMock()
+    monkeypatch.setattr('src.routes.auth.send_email', mock_send_email)
     current_user: User = session.query(User).filter(User.email == user.get('email')).first()
     current_user.confirmed = True
     session.commit()
