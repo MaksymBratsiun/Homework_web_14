@@ -62,8 +62,6 @@ def test_login_invalid_email(client, user, session):
 
 
 def test_refresh_token(client, user, session, monkeypatch):
-    mock_send_email = MagicMock()
-    monkeypatch.setattr('src.routes.auth.send_email', mock_send_email)
     current_user: User = session.query(User).filter(User.email == user.get('email')).first()
     current_user.confirmed = True
     session.commit()
