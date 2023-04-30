@@ -46,7 +46,7 @@ def get_password_hash(password: str):
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/api/auth/login')
 
 
-async def create_access_token(data: dict, expires_delta: Optional[float] = None):
+def create_access_token(data: dict, expires_delta: Optional[float] = None):
     """
     The create_access_token function creates a JWT token that is used to authenticate the user.
         The function takes in two arguments: data and expires_delta. Data is a dictionary containing
@@ -69,7 +69,7 @@ async def create_access_token(data: dict, expires_delta: Optional[float] = None)
     return encoded_access_token
 
 
-async def create_refresh_token(data: dict, expires_delta: Optional[float] = None):
+def create_refresh_token(data: dict, expires_delta: Optional[float] = None):
     """
     The create_refresh_token function creates a refresh token for the user.
         Args:
