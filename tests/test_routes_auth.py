@@ -65,7 +65,7 @@ def test_refresh_token(client, user, session, monkeypatch):
     mock_send_email = MagicMock()
     monkeypatch.setattr('src.routes.auth.send_email', mock_send_email)
     current_user: User = session.query(User).filter(User.email == user.get('email')).first()
-    current_user.confirmed = False
+    current_user.confirmed = True
     session.commit()
     login_response = client.post('/api/auth/login', data={'username': user.get('email'), 'password': user.get('password')})
     payload = login_response.json()
